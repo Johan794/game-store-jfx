@@ -29,7 +29,7 @@ public class QueueList<E>  {
         }
     }
 
-    public Node<E> dequeue(){
+    public E dequeue(){
         if (front!=null){
             Node <E> dequeue=front;
             if (front.getNext()==null){
@@ -37,7 +37,7 @@ public class QueueList<E>  {
             }else{
                 front=front.getNext();
             }
-            return dequeue;
+            return dequeue.getValue();
         }else{
             return null;
         }

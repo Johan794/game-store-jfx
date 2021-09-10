@@ -20,12 +20,14 @@ public class StackList<E>{
         }
     }
 
-    public void pop(){
+    public E pop(){
+        E value = lastNode.getValue();
         if(lastNode.getBehind() != null){
             lastNode = lastNode.getBehind();
         }else{
             lastNode = null;
         }
+        return value;
     }
 
     public E top(){
