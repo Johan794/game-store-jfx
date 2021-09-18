@@ -1,4 +1,4 @@
-package model;
+package model.ownImplementation;
 
 public class StackList<E>{
 
