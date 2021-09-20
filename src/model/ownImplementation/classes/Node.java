@@ -1,4 +1,4 @@
-package model;
+package model.ownImplementation.classes;
 
 public class Node<E>{
 
