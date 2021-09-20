@@ -1,6 +1,6 @@
 package ui;
-import model.ownImplementation.QueueList;
-import model.ownImplementation.StackList;
+import model.ownImplementation.classes.QueueList;
+import model.ownImplementation.classes.StackList;
 
 public class Main{
     public static void main(String[] args) {
