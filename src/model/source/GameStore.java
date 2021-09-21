@@ -1,5 +1,7 @@
 package model.source;
 
+import model.ownImplementation.classes.HashTable;
+
 import java.util.ArrayList;
 
 public class GameStore{
@@ -8,5 +10,4 @@ public class GameStore{
     private ArrayList<Publication> review;
     private ArrayList<Publication> critics;
     private ArrayList<HashTable<String,Game>> gameStands;
-
 }

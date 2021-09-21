@@ -1,21 +1,14 @@
-package model;
+package model.ownImplementation.classes;
 
 public class HashNode<K,V> {
     private K key;
     private V value;
     private HashNode<K,V> next;
 
+
     public HashNode() {
         this.key = null;
         this.value = null;
-    }
-
-    public HashNode<K, V> getNext() {
-        return next;
-    }
-
-    public void setNext(HashNode<K, V> next) {
-        this.next = next;
     }
 
     public K getKey() {
@@ -32,5 +25,13 @@ public class HashNode<K,V> {
 
     public void setValue(V value) {
         this.value = value;
+    }
+
+    public HashNode<K, V> getNext() {
+        return next;
+    }
+
+    public void setNext(HashNode<K, V> next) {
+        this.next = next;
     }
 }
