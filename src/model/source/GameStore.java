@@ -6,14 +6,8 @@ import java.util.ArrayList;
 
 public class GameStore{
 
-    public ArrayList<Game> storeGames;
-    public ArrayList<Publication> review;
-    public ArrayList<Publication> critics;
 
-    public StackList<Game> userGames;
+    private int cashiers;
+    ArrayList<Shelve> shelves;
 
-    public GameStore(){
-
-    }
-    public
 }
