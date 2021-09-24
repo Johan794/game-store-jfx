@@ -2,17 +2,17 @@ package model.source;
 
 public class Game {
 
-    private String title;
-    private String info;
-    private double evaluation;
-    private String code;
-    private double quantity;
+    private int code;
+    private int price;
+    private int quantity;
 
-    public Game(String title, String info, double evaluation, String code, double quantity){
-        this.title = title;
-        this.info = info;
-        this.evaluation = evaluation;
-        this.code = code;
+    public Game(int gCode, int price, int quantity){
+        this.code = gCode;
+        this.price = price;
         this.quantity = quantity;
+    }
+
+    public int getCode(){
+        return code;
     }
 }

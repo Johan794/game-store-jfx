@@ -1,5 +1,7 @@
 package ui;
 
+import model.source.GameStore;
+
 import java.util.Scanner;
 
 public class Main{
@@ -12,6 +14,8 @@ public class Main{
         int cases = sc.nextInt();
         int cashier = sc.nextInt();
         int shelves = sc.nextInt();
+
+        GameStore gs = new GameStore(cashier, shelves);
 
         sc.nextLine();
 
@@ -26,10 +30,12 @@ public class Main{
             String[] sLine = line.split(" ");
             code = sLine[0];
             quantity = Integer.parseInt(sLine[1]);
+            gs.addShelve(code, quantity);
             for(int j = 0; j<quantity; j++){
                 codeGame = sc.nextInt();
                 priceGame = sc.nextInt();
                 quantityGame = sc.nextInt();
+                gs.shelveAddGame(code, codeGame, priceGame, quantityGame);
             }
         }
 
