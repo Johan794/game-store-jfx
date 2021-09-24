@@ -1,5 +1,7 @@
 package model.source;
 
+import model.ownImplementation.classes.*;
+
 public class Client {
 
     private String code;

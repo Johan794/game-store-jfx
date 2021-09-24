@@ -1,41 +1,45 @@
 package ui;
-import model.ownImplementation.classes.QueueList;
-import model.ownImplementation.classes.StackList;
+
+import java.util.Scanner;
 
 public class Main{
+
+    private static Scanner sc;
+
     public static void main(String[] args) {
-        StackList<String> list = new StackList<>();
-        list.push("Prueba 1");
-        list.push("Prueba 2");
-        list.push("Prueba 3");
-        list.push("Prueba 4");
-        list.push("Prueba ultima");
+        sc = new Scanner(System.in);
 
-        QueueList<String> queue = new QueueList<>();
-        queue.enqueue("Prueba 1");
-        queue.enqueue("Prueba 2");
-        queue.enqueue("Prueba 3");
-        queue.enqueue("Prueba 3");
-        queue.enqueue("Prueba 4");
-        queue.enqueue("Prueba ultima");
+        int cases = sc.nextInt();
+        int cashier = sc.nextInt();
+        int shelves = sc.nextInt();
 
-        System.out.print("\n ----- \t Stack Debug \t -----\n");
+        sc.nextLine();
 
-        System.out.println(list.top());
-        list.pop();
-        System.out.println(list.top());
-        list.push("Prueba ultima");
-
-        System.out.print("\n ----- \t Stack \t -----\n");
-
-        while(!list.isEmpty()){
-            System.out.println(list.pop());
+        String code = "";
+        int quantity = 0;
+        String line = "";
+        int codeGame = 0;
+        int priceGame = 0;
+        int quantityGame = 0;
+        for(int i = 0; i<shelves; i++){
+            line = sc.nextLine();
+            String[] sLine = line.split(" ");
+            code = sLine[0];
+            quantity = Integer.parseInt(sLine[1]);
+            for(int j = 0; j<quantity; j++){
+                codeGame = sc.nextInt();
+                priceGame = sc.nextInt();
+                quantityGame = sc.nextInt();
+            }
         }
 
-        System.out.print("\n ----- \t Queue \t -----\n");
+        int clients = sc.nextInt();
 
-        while(!queue.isEmpty()){
-            System.out.println(queue.dequeue());
+        sc.nextLine();
+        for(int i = 0; i<clients; i++){
+            line = sc.nextLine();
+            System.out.println(line);
+            String[] sLine = line.split(" ");
         }
     }
 }
