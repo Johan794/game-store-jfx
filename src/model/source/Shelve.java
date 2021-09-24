@@ -1,13 +1,14 @@
 package model.source;
 
-import java.util.ArrayList;
+import model.ownImplementation.classes.HashTable;
 
 public class Shelve {
 
     private String code;
-    private ArrayList<Game> games;
+    private HashTable<Integer, Game> games;
 
-    public Shelve(String code){
+    public Shelve(String code, int size){
         this.code = code;
+        this.games = new HashTable<>(size);
     }
 }
