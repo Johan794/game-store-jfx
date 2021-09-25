@@ -1,6 +1,9 @@
 package model.source;
 
 import model.ownImplementation.classes.*;
+import model.ownImplementation.classes.Duplex;
+import model.ownImplementation.classes.HashTable;
+import model.ownImplementation.classes.QueueList;
 
 import java.util.ArrayList;
 
@@ -8,24 +11,37 @@ public class GameStore{
 
 
     private int cashiers;
-    private HashTable<Integer, Shelve> shelves;
+    private ArrayList<Shelve> shelves;
     private ArrayList<Client> clients;
     private int time;
 
     public GameStore(int cashiers, int shelves){
         this.cashiers = cashiers;
-        this.shelves = new HashTable<>(shelves);
+        this.shelves = new ArrayList<>();
         this.clients = new ArrayList<>();
         this.time = 0;
     }
 
     public void addShelve(String code, int size){
         Shelve shelve = new Shelve(code, size);
-        shelves.insert(shelve, (int) strToIntCode(code), 0);
+        shelves.add(shelve);
     }
 
     public void shelveAddGame(String code, int gCode, int price, int quantity){
-        shelves.getNodeBykey((int) strToIntCode(code)).getValue().addGame(gCode, price, quantity);
+        Game game = new Game(gCode, price, quantity);
+        shelves.get(findShelve(code)).addGame(game);
+    }
+
+    public int findShelve(String code){
+        boolean found = false;
+        int index = 0;
+        for(int i = 0; i<shelves.size(); i++){
+            if(shelves.get(i).getCode().equals(code)){
+                index = i;
+                found = true;
+            }
+        }
+        return index;
     }
 
     private long strToIntCode(String code){
@@ -39,21 +55,76 @@ public class GameStore{
         return iCode;
     }
 
-    public void addClient(String code){
+    public void addClient(String code, ArrayList<String> gameCodes){
         Client client = new Client(code);
+        ArrayList<Duplex<Integer, Integer>> games = new ArrayList<>();
+        String sCode = "";
+        int sIndex = 0;
+        boolean found = false;
+        for(int i = 0; i<gameCodes.size(); i++){
+            sCode = findGameShelve(Integer.parseInt(gameCodes.get(i)));
+            found = false;
+            for(int j = 0; j<shelves.size() && !found; j++){
+                if(shelves.get(j).getCode().equals(sCode)){
+                    sIndex = j;
+                    found = true;
+                }
+            }
+            games.add(new Duplex<>(sIndex, Integer.parseInt(gameCodes.get(i))));
+        }
+
+        for(int i = 1; i < games.size(); i++){
+            for(int j = i; j > 0 && games.get(j-1).getKey() > games.get(j).getKey(); j--){
+                Duplex<Integer, Integer> temporal = games.get(j);
+                games.set(j,games.get(j-1));
+                games.set(j-1,temporal);
+            }
+        }
+        //Aca se ordena :D
+        /*
+
+            ██╗███╗░░██╗░██████╗███████╗██████╗░████████╗       ░█████╗░░█████╗░██████╗░███████╗
+            ██║████╗░██║██╔════╝██╔════╝██╔══██╗╚══██╔══╝       ██╔══██╗██╔══██╗██╔══██╗██╔════╝
+            ██║██╔██╗██║╚█████╗░█████╗░░██████╔╝░░░██║░░░       ██║░░╚═╝██║░░██║██║░░██║█████╗░░
+            ██║██║╚████║░╚═══██╗██╔══╝░░██╔══██╗░░░██║░░░       ██║░░██╗██║░░██║██║░░██║██╔══╝░░
+            ██║██║░╚███║██████╔╝███████╗██║░░██║░░░██║░░░       ╚█████╔╝╚█████╔╝██████╔╝███████╗
+            ╚═╝╚═╝░░╚══╝╚═════╝░╚══════╝╚═╝░░╚═╝░░░╚═╝░░░       ░╚════╝░░╚════╝░╚═════╝░╚══════╝
+
+            ██╗░░██╗███████╗██████╗░███████╗
+            ██║░░██║██╔════╝██╔══██╗██╔════╝
+            ███████║█████╗░░██████╔╝█████╗░░
+            ██╔══██║██╔══╝░░██╔══██╗██╔══╝░░
+            ██║░░██║███████╗██║░░██║███████╗
+            ╚═╝░░╚═╝╚══════╝╚═╝░░╚═╝╚══════╝
+         */
+
+
+        // Dejo el insert code here porque está melitico 😜
+
+        for(int i = 0; i<games.size(); i++){
+            client.addGameToQueue(games.get(i).getValue());
+        }
         clients.add(client);
     }
 
     public Game findGame(int gCode){
         Game game = null;
-        for(int i = 0; i<shelves.getSize(); i++){
-            if(shelves.getNodeByIndex(i).getValue() != null){
-                if(shelves.getNodeByIndex(i).getValue().isGame(gCode)){
-                    game = shelves.getNodeByIndex(i).getValue().findGame(gCode);
-                }
+        for(int i = 0; i<shelves.size(); i++){
+            if(shelves.get(i).isGame(gCode)){
+                game = shelves.get(i).findGame(gCode);
             }
         }
         return game;
+    }
+
+    public String findGameShelve(int gCode){
+        String shelve = "";
+        for(int i = 0; i<shelves.size(); i++){
+            if(shelves.get(i).isGame(gCode)){
+                shelve = shelves.get(i).getCode();
+            }
+        }
+        return shelve;
     }
 
     public void clientAddGame(String code, int gCode){
