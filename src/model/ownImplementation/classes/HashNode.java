@@ -11,6 +11,11 @@ public class HashNode<K,V> {
         this.value = null;
     }
 
+    public HashNode(K key, V value){
+        this.key = key;
+        this.value = value;
+    }
+
     public K getKey() {
         return key;
     }
