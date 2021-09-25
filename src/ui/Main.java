@@ -38,6 +38,7 @@ public class Main{
                 quantityGame = sc.nextInt();
                 gs.shelveAddGame(code, codeGame, priceGame, quantityGame);
             }
+            sc.nextLine();
         }
 
         int clients = sc.nextInt();
@@ -48,10 +49,14 @@ public class Main{
             System.out.println(line);
             String[] sLine = line.split(" ");
             ArrayList<String> gameCodes = new ArrayList<>();
-            for(int j = 1; j< sLine.length; j++){
-                gameCodes.add(sLine[i]);
+            for(int j = 1; j<sLine.length; j++){
+                gameCodes.add(sLine[j]);
             }
             gs.addClient(sLine[0], gameCodes);
+        }
+
+        while(!gs.advance()){
+            System.out.println(gs.getTime());
         }
     }
 }
