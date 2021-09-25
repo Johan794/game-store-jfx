@@ -14,14 +14,6 @@ public class GameStoreTest {
 
     }
 
-    @Test
-    void addShelve() {
-        setUpScenario1();
-        String code = "D";
-        int size = 8;
-        test.addShelve(code,size);
-        assertNotNull(test.getShelves().getNodeBykey((int)test.strToIntCode(code)));
-    }
 
     @Test
     void shelveAddGame() {

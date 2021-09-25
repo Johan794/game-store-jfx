@@ -8,25 +8,36 @@ import java.util.ArrayList;
 public class GameStore{
 
     private int cashiers;
-    private HashTable<Integer, Shelve> shelves;
+    private ArrayList<Shelve> shelves;
     private ArrayList<Client> clients;
     private int time;
 
     public GameStore(int cashiers, int shelves){
         this.cashiers = cashiers;
-        this.shelves = new HashTable<>(shelves);
+        this.shelves = new ArrayList<>();
         this.clients = new ArrayList<>();
         this.time = 0;
     }
 
     public void addShelve(String code, int size){
         Shelve shelve = new Shelve(code, size);
-        //System.out.println("Key en la origin: "+(int) strToIntCode(code));
-        shelves.insert(shelve, (int) strToIntCode(code), 0);
+        shelves.add(shelve);
     }
 
     public void shelveAddGame(String code, int gCode, int price, int quantity){
-        shelves.getNodeBykey((int) strToIntCode(code)).getValue().addGame(gCode, price, quantity);
+        shelves.get(findShelve(code)).addGame(gCode, price, quantity);
+    }
+
+    public int findShelve(String code){
+        boolean found = false;
+        int index = 0;
+        for(int i = 0; i<shelves.size(); i++){
+            if(shelves.get(i).getCode().equals(code)){
+                index = i;
+                found = true;
+            }
+        }
+        return index;
     }
 
     public long strToIntCode(String code){
@@ -47,11 +58,9 @@ public class GameStore{
 
     public Game findGame(int gCode){
         Game game = null;
-        for(int i = 0; i<shelves.getSize(); i++){
-            if(shelves.getNodeByIndex(i).getValue() != null){
-                if(shelves.getNodeByIndex(i).getValue().isGame(gCode)){
-                    game = shelves.getNodeByIndex(i).getValue().findGame(gCode);
-                }
+        for(int i = 0; i<shelves.size(); i++){
+            if(shelves.get(i).isGame(gCode)){
+                game = shelves.get(i).findGame(gCode);
             }
         }
         return game;
@@ -73,7 +82,7 @@ public class GameStore{
 
     }
 
-    public HashTable<Integer, Shelve> getShelves() {
+    public ArrayList<Shelve> getShelves() {
         return shelves;
     }
 }
