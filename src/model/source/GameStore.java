@@ -1,5 +1,6 @@
 package model.source;
 
+import model.ownImplementation.classes.Duplex;
 import model.ownImplementation.classes.HashTable;
 import model.ownImplementation.classes.QueueList;
 
@@ -25,7 +26,8 @@ public class GameStore{
     }
 
     public void shelveAddGame(String code, int gCode, int price, int quantity){
-        shelves.get(findShelve(code)).addGame(gCode, price, quantity);
+        Game game = new Game(gCode, price, quantity);
+        shelves.get(findShelve(code)).addGame(game);
     }
 
     public int findShelve(String code){
@@ -51,8 +53,43 @@ public class GameStore{
         return iCode;
     }
 
-    public void addClient(String code){
+    public void addClient(String code, ArrayList<String> gameCodes){
         Client client = new Client(code);
+        ArrayList<Duplex<Integer, Integer>> games = new ArrayList<>();
+        String sCode = "";
+        int sIndex = 0;
+        boolean found = false;
+        for(int i = 0; i<gameCodes.size(); i++){
+            sCode = findGameShelve(Integer.parseInt(gameCodes.get(i)));
+            found = false;
+            for(int j = 0; j<shelves.size() && !found; j++){
+                if(shelves.get(j).getCode().equals(sCode)){
+                    sIndex = j;
+                    found = true;
+                }
+            }
+            games.add(new Duplex<>(sIndex, Integer.parseInt(gameCodes.get(i))));
+        }
+        //Aca se ordena :D
+        /*
+
+            ██╗███╗░░██╗░██████╗███████╗██████╗░████████╗       ░█████╗░░█████╗░██████╗░███████╗
+            ██║████╗░██║██╔════╝██╔════╝██╔══██╗╚══██╔══╝       ██╔══██╗██╔══██╗██╔══██╗██╔════╝
+            ██║██╔██╗██║╚█████╗░█████╗░░██████╔╝░░░██║░░░       ██║░░╚═╝██║░░██║██║░░██║█████╗░░
+            ██║██║╚████║░╚═══██╗██╔══╝░░██╔══██╗░░░██║░░░       ██║░░██╗██║░░██║██║░░██║██╔══╝░░
+            ██║██║░╚███║██████╔╝███████╗██║░░██║░░░██║░░░       ╚█████╔╝╚█████╔╝██████╔╝███████╗
+            ╚═╝╚═╝░░╚══╝╚═════╝░╚══════╝╚═╝░░╚═╝░░░╚═╝░░░       ░╚════╝░░╚════╝░╚═════╝░╚══════╝
+
+            ██╗░░██╗███████╗██████╗░███████╗
+            ██║░░██║██╔════╝██╔══██╗██╔════╝
+            ███████║█████╗░░██████╔╝█████╗░░
+            ██╔══██║██╔══╝░░██╔══██╗██╔══╝░░
+            ██║░░██║███████╗██║░░██║███████╗
+            ╚═╝░░╚═╝╚══════╝╚═╝░░╚═╝╚══════╝
+         */
+        for(int i = 0; i<games.size(); i++){
+            client.addGameToQueue(games.get(i).getValue());
+        }
         clients.add(client);
     }
 
@@ -64,6 +101,16 @@ public class GameStore{
             }
         }
         return game;
+    }
+
+    public String findGameShelve(int gCode){
+        String shelve = "";
+        for(int i = 0; i<shelves.size(); i++){
+            if(shelves.get(i).isGame(gCode)){
+                shelve = shelves.get(i).getCode();
+            }
+        }
+        return shelve;
     }
 
     public void clientAddGame(String code, int gCode){
