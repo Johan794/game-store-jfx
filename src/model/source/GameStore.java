@@ -177,7 +177,10 @@ public class GameStore{
             }
         }
         if(occupiedCashiers <= cashiers){
-            payingClients.add(payQueue.dequeue());
+            Client client = payQueue.dequeue();
+            if(client != null) {
+                payingClients.add(client);
+            }
         }
         for(int i = 0; i<payingClients.size(); i++){
             if(!proccessPayGame(payingClients.get(i))){
