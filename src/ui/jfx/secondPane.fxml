@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <right>
+      <Separator orientation="VERTICAL" prefHeight="400.0" prefWidth="86.0" BorderPane.alignment="CENTER" />
+   </right>
+   <left>
+      <Separator orientation="VERTICAL" prefHeight="400.0" prefWidth="106.0" BorderPane.alignment="CENTER" />
+   </left>
+   <center>
+      <AnchorPane prefHeight="400.0" prefWidth="361.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label fx:id="lbTochange" layoutX="25.0" layoutY="38.0" prefHeight="33.0" prefWidth="127.0" text="Amount of cashiers" textAlignment="CENTER" />
+            <TextField fx:id="txtAmountCashiers" layoutX="183.0" layoutY="41.0" />
+            <TextField fx:id="txtAmountShelves" layoutX="183.0" layoutY="91.0" />
+            <Button fx:id="btInfoShelvesAndClients" layoutX="252.0" layoutY="254.0" mnemonicParsing="false" onAction="#getInformation" text="Submit" visible="false" />
+            <Button fx:id="btAmountCashiersAndShelves" layoutX="301.0" layoutY="132.0" mnemonicParsing="false" onAction="#getAmounts" text="Submit" />
+            <TextArea fx:id="txtAInformation" layoutX="25.0" layoutY="194.0" prefHeight="145.0" prefWidth="186.0" visible="false" />
+            <Label fx:id="lbAmountS" layoutX="28.0" layoutY="96.0" text="Amount of shelves" />
+            <Label fx:id="lbInfo" layoutX="23.0" layoutY="168.0" prefHeight="16.0" prefWidth="398.0" text="Complete fill the amounts first" />
+            <Button fx:id="btInfoClient" layoutX="254.0" layoutY="293.0" mnemonicParsing="false" onAction="#getInformationClient" text="Submit" visible="false" />
+         </children>
+      </AnchorPane>
+   </center>
+</BorderPane>
