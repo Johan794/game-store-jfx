@@ -11,14 +11,22 @@ public class GameStore{
 
 
     private int cashiers;
+    private int occupiedCashiers;
     private ArrayList<Shelve> shelves;
     private ArrayList<Client> clients;
+    private ArrayList<Client> findingClients;
+    private ArrayList<Client> payingClients;
+    private QueueList<Client> payQueue;
     private int time;
 
     public GameStore(int cashiers, int shelves){
         this.cashiers = cashiers;
+        this.occupiedCashiers = 0;
         this.shelves = new ArrayList<>();
         this.clients = new ArrayList<>();
+        this.findingClients = new ArrayList<>();
+        this.payingClients = new ArrayList<>();
+        this.payQueue = new QueueList<>();
         this.time = 0;
     }
 
@@ -139,8 +147,55 @@ public class GameStore{
         clients.get(index).addGame(findGame(gCode));
     }
 
-    public void advance(){
+    public boolean proccessFindGame(Client client){
+        boolean bl = false;
+        if(!client.getFindGames().isEmpty()){
+            client.getGames().push(findGame(client.getFindGames().dequeue()));
+            bl = true;
+        }
+        return bl;
+    }
 
+    public boolean proccessPayGame(Client client){
+        boolean bl = false;
+        if(!client.getGames().isEmpty()){
+            client.getPaidGames().push(client.getGames().pop());
+            bl = true;
+        }
+        return bl;
+    }
+
+    public boolean advance(){
+        if(clients.size() > time){
+            findingClients.add(clients.get(time));
+        }
+        for(int i = 0; i<findingClients.size(); i++){
+            if(!proccessFindGame(findingClients.get(i))){
+                payQueue.enqueue(findingClients.get(i));
+                findingClients.remove(i);
+                i--;
+            }
+        }
+        if(occupiedCashiers <= cashiers){
+            payingClients.add(payQueue.dequeue());
+        }
+        for(int i = 0; i<payingClients.size(); i++){
+            if(!proccessPayGame(payingClients.get(i))){
+                occupiedCashiers--;
+                payingClients.remove(i);
+                i--;
+            }
+        }
+        boolean bl = false;
+        if((time >= clients.size()) && (payingClients.isEmpty()) && (findingClients.isEmpty()) && (payQueue.isEmpty())){
+            bl = true;
+        }
+        time++;
+        return bl;
+    }
+
+    public int getTime(){
+        return time;
     }
 
     public ArrayList<Shelve> getShelves() {
