@@ -21,6 +21,7 @@ public class GameStore{
 
     public void addShelve(String code, int size){
         Shelve shelve = new Shelve(code, size);
+        //System.out.println("Key en la origin: "+(int) strToIntCode(code));
         shelves.insert(shelve, (int) strToIntCode(code), 0);
     }
 
@@ -28,7 +29,7 @@ public class GameStore{
         shelves.getNodeBykey((int) strToIntCode(code)).getValue().addGame(gCode, price, quantity);
     }
 
-    private long strToIntCode(String code){
+    public long strToIntCode(String code){
         long iCode = 0;
         int radix = 127;
         int j = 0;
@@ -70,5 +71,9 @@ public class GameStore{
 
     public void advance(){
 
+    }
+
+    public HashTable<Integer, Shelve> getShelves() {
+        return shelves;
     }
 }
