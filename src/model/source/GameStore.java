@@ -177,6 +177,7 @@ public class GameStore{
             }
         }
         if(occupiedCashiers <= cashiers){
+            System.out.println("Agregó");
             payingClients.add(payQueue.dequeue());
         }
         for(int i = 0; i<payingClients.size(); i++){
