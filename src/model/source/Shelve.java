@@ -15,8 +15,7 @@ public class Shelve {
         this.games = new ArrayList<>();
     }
 
-    public void addGame(int gCode, int price, int quantity){
-        Game game = new Game(gCode, price, quantity);
+    public void addGame(Game game){
         games.add(game);
     }
 

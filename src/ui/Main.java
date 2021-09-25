@@ -2,6 +2,7 @@ package ui;
 
 import model.source.GameStore;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main{
@@ -44,6 +45,11 @@ public class Main{
             line = sc.nextLine();
             System.out.println(line);
             String[] sLine = line.split(" ");
+            ArrayList<String> gameCodes = new ArrayList<>();
+            for(int j = 1; j< sLine.length; j++){
+                gameCodes.add(sLine[i]);
+            }
+            gs.addClient(sLine[0], gameCodes);
         }
     }
 }
