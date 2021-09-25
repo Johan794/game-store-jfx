@@ -1,5 +1,6 @@
 package model.source;
 
+import model.ownImplementation.classes.*;
 import model.ownImplementation.classes.Duplex;
 import model.ownImplementation.classes.HashTable;
 import model.ownImplementation.classes.QueueList;
@@ -7,6 +8,7 @@ import model.ownImplementation.classes.QueueList;
 import java.util.ArrayList;
 
 public class GameStore{
+
 
     private int cashiers;
     private ArrayList<Shelve> shelves;
@@ -70,6 +72,14 @@ public class GameStore{
             }
             games.add(new Duplex<>(sIndex, Integer.parseInt(gameCodes.get(i))));
         }
+
+        for(int i = 1; i < games.size(); i++){
+            for(int j = i; j > 0 && games.get(j-1).getKey() > games.get(j).getKey(); j--){
+                Duplex<Integer, Integer> temporal = games.get(j);
+                games.set(j,games.get(j-1));
+                games.set(j-1,temporal);
+            }
+        }
         //Aca se ordena :D
         /*
 
@@ -87,6 +97,10 @@ public class GameStore{
             ██║░░██║███████╗██║░░██║███████╗
             ╚═╝░░╚═╝╚══════╝╚═╝░░╚═╝╚══════╝
          */
+
+
+        // Dejo el insert code here porque está melitico 😜
+
         for(int i = 0; i<games.size(); i++){
             client.addGameToQueue(games.get(i).getValue());
         }
