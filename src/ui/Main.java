@@ -46,7 +46,7 @@ public class Main extends Application {
                 codeGame = sc.nextInt();
                 priceGame = sc.nextInt();
                 quantityGame = sc.nextInt();
-              //  System.out.println(code+" "+ " "+codeGame +" "+" "+priceGame+ " "+quantityGame);
+               // System.out.println(code+" "+ " "+codeGame +" "+" "+priceGame+ " "+quantityGame);
                 gs.shelveAddGame(code, codeGame, priceGame, quantityGame);
             }
             sc.nextLine();
@@ -57,7 +57,6 @@ public class Main extends Application {
         sc.nextLine();
         for(int i = 0; i<clients; i++){
             line = sc.nextLine();
-            System.out.println(line);
             String[] sLine = line.split(" ");
             ArrayList<String> gameCodes = new ArrayList<>();
             for(int j = 1; j<sLine.length; j++){
@@ -67,9 +66,10 @@ public class Main extends Application {
         }
 
         while(!gs.advance()){
-            System.out.println(gs.getTime());
+            //Hola
+
         }
-        
+        // System.out.print(gs.getOut());
 
     }
 
@@ -90,9 +90,5 @@ public class Main extends Application {
         fxmlLoader1.setController(gui);
         Parent input = fxmlLoader1.load();
         gui.getBorderpane().setCenter(input);
-
-
-
-
     }
 }

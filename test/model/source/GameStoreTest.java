@@ -143,7 +143,6 @@ public class GameStoreTest {
     void proccessFindGame() throws FileNotFoundException {
         setUpSceneario3();
         Client client = test.getClients().get(3);
-        System.out.println("codigo del cliente "+client.getCode());
         assertTrue(test.proccessFindGame(client));
     }
 
@@ -152,7 +151,6 @@ public class GameStoreTest {
     void proccessPayGame() throws FileNotFoundException {
         setUpSceneario3();
         Client client = test.getClients().get(4);
-        System.out.println("codigo del cliente "+client.getCode());
         assertFalse(test.proccessPayGame(client));
 
     }

@@ -12,16 +12,19 @@ public class GameStore{
 
     private int cashiers;
     private int occupiedCashiers;
+    private int outClients;
     private ArrayList<Shelve> shelves;
     private ArrayList<Client> clients;
     private ArrayList<Client> findingClients;
     private ArrayList<Client> payingClients;
     private QueueList<Client> payQueue;
+    private HashTable<Integer, Duplex<String, Integer>> out;
     private int time;
 
     public GameStore(int cashiers, int shelves){
         this.cashiers = cashiers;
         this.occupiedCashiers = 0;
+        this.outClients = 0;
         this.shelves = new ArrayList<>();
         this.clients = new ArrayList<>();
         this.findingClients = new ArrayList<>();
@@ -166,6 +169,9 @@ public class GameStore{
     }
 
     public boolean advance(){
+        if(out == null){
+            out = new HashTable<>(clients.size());
+        }
         if(clients.size() > time){
             findingClients.add(clients.get(time));
         }
@@ -185,6 +191,8 @@ public class GameStore{
         for(int i = 0; i<payingClients.size(); i++){
             if(!proccessPayGame(payingClients.get(i))){
                 occupiedCashiers--;
+                Duplex<String, Integer> dupl = new Duplex<>(payingClients.get(i).getCode(), clientGetTotal(payingClients.get(i)));
+                out.insert(dupl, outClients, 0);
                 payingClients.remove(i);
                 i--;
             }
@@ -195,6 +203,45 @@ public class GameStore{
         }
         time++;
         return bl;
+    }
+
+    public int clientGetTotal(Client client){
+        int total = 0;
+        StackList<Game> gameCopy = client.getPaidGames();
+        while(!gameCopy.isEmpty()){
+            total += gameCopy.pop().getPrice();
+        }
+        return total;
+    }
+
+    public String getOut(){
+        String sOut = "";
+        for(int i = 0; i<out.getSize(); i++){
+            sOut += out.getNodeByIndex(i).getValue().getKey() + " " + out.getNodeByIndex(i).getValue().getValue() + "\n";
+            sOut += clientStackToString(findClientByCode(out.getNodeByIndex(i).getValue().getKey())) + "\n";
+        }
+        return sOut;
+    }
+
+    public Client findClientByCode(String code){
+        boolean found = false;
+        Client client = null;
+        for (int i = 0; i<clients.size() && !found; i++){
+            if(clients.get(i).getCode().equals(code)){
+                client = clients.get(i);
+                found = true;
+            }
+        }
+        return client;
+    }
+
+    public String clientStackToString(Client client){
+        String sOut = "";
+        StackList<Game> games = client.getPaidGames();
+        while(!games.isEmpty()){
+            sOut += games.pop().getCode() + " ";
+        }
+        return sOut;
     }
 
     public int getTime(){

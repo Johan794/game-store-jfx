@@ -15,4 +15,6 @@ public class Game {
     public int getCode(){
         return code;
     }
+
+    public int getPrice(){ return price; }
 }
