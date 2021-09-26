@@ -46,7 +46,6 @@ public class Main{
         sc.nextLine();
         for(int i = 0; i<clients; i++){
             line = sc.nextLine();
-            System.out.println(line);
             String[] sLine = line.split(" ");
             ArrayList<String> gameCodes = new ArrayList<>();
             for(int j = 1; j<sLine.length; j++){
@@ -56,7 +55,9 @@ public class Main{
         }
 
         while(!gs.advance()){
-            System.out.println(gs.getTime());
+            //Hola
         }
+
+        System.out.print(gs.getOut());
     }
 }
