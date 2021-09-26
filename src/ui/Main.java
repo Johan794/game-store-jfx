@@ -53,7 +53,7 @@ public class Main{
             }
             gs.addClient(sLine[0], gameCodes);
         }
-
+        gs.setup();
         while(!gs.advance()){
             //Hola
         }

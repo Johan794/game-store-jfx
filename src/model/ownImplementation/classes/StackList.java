@@ -10,6 +10,10 @@ public class StackList<E>{
         lastNode = new Node<E>(value);
     }
 
+    public StackList(StackList<E> list){
+        this.lastNode = list.lastNode;
+    }
+
     public void push(E value){
         if(lastNode == null){
             lastNode = new Node<E>(value);
