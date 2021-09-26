@@ -204,4 +204,8 @@ public class GameStore{
     public ArrayList<Shelve> getShelves() {
         return shelves;
     }
+
+    public ArrayList<Client> getClients() {
+        return clients;
+    }
 }

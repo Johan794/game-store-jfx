@@ -7,9 +7,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import model.source.GameStore;
-
 import java.io.*;
-import java.util.Arrays;
+import java.util.Scanner;
 
 public class GameStoreGUI {
     private GameStore gameStore;
@@ -95,7 +94,7 @@ public class GameStoreGUI {
     public void getInformation(ActionEvent event) throws IOException {
         PrintWriter pw = new PrintWriter("data/info.txt");
         FileReader fileReader = new FileReader("data/info.txt");
-        BufferedReader bf = new BufferedReader(fileReader);
+        Scanner sc = new Scanner(fileReader);
         pw.print(txtAInformation.getText());
         pw.close();
         if(amountShelves!=0){
