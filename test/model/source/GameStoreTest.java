@@ -28,6 +28,7 @@ public class GameStoreTest {
         String sh2 = "B";
         String sh3 = "C";
 
+
         int qSh1 = 4;
         int qSh2 = 5;
         int qSh3 = 2;
@@ -142,6 +143,7 @@ public class GameStoreTest {
     void proccessFindGame() throws FileNotFoundException {
         setUpSceneario3();
         Client client = test.getClients().get(3);
+        System.out.println("codigo del cliente "+client.getCode());
         assertTrue(test.proccessFindGame(client));
     }
 
@@ -149,8 +151,9 @@ public class GameStoreTest {
     @Test
     void proccessPayGame() throws FileNotFoundException {
         setUpSceneario3();
-        Client client = test.getClients().get(2);
-        assertTrue(test.proccessFindGame(client));
+        Client client = test.getClients().get(4);
+        System.out.println("codigo del cliente "+client.getCode());
+        assertFalse(test.proccessPayGame(client));
 
     }
 
