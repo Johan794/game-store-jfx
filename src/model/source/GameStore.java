@@ -187,6 +187,19 @@ public class GameStore{
                 findingClients.get(i).setKey(findingClients.get(i).getKey()+1);
             }
         }
+            boolean changed = true;
+            for(int i = 1; i < findingClients.size()-1 && changed; i++){
+                changed = false;
+                for(int j = 0; j < findingClients.size()-i; j++){
+                    if(findingClients.get(j).getKey() > findingClients.get(j+1).getKey()){
+                        changed = true;
+                        Duplex temp = findingClients.get(j);
+                        findingClients.set(j,findingClients.get(j+1));
+                        findingClients.set(j+1, temp);
+                    }
+                }
+            }
+
         //Aca se ordena :D
         /*
             ██╗███╗░░██╗░██████╗███████╗██████╗░████████╗       ░█████╗░░█████╗░██████╗░███████╗
