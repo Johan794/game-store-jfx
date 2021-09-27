@@ -8,6 +8,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import model.source.GameStore;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class GameStoreGUI {
@@ -46,11 +48,13 @@ public class GameStoreGUI {
 
     private int amountShelves;
     private int amountClientes;
+    private int counter;
 
 
     public GameStoreGUI() {
         amountClientes = 0;
         amountShelves = 0;
+        counter = 0;
 
     }
 
@@ -67,14 +71,13 @@ public class GameStoreGUI {
             if(gameStore==null){
                 int cashiers = Integer.parseInt(txtAmountCashiers.getText());
                 int shelves = Integer.parseInt(txtAmountShelves.getText());
-                amountShelves = shelves-1;
+                amountShelves = shelves;
                 setGameStore(cashiers,shelves);
                 lbInfo.setText("Please give the information for each shelve");
                 btInfoShelvesAndClients.setVisible(true);
             }else{
-                lbInfo.setText("Please give the information for each client");
+                lbInfo.setText("Please give the information of all the clients");
                 amountClientes = Integer.parseInt(txtAmountCashiers.getText());
-                amountClientes = amountClientes-1;
                 btInfoClient.setVisible(true);
             }
             txtAInformation.setVisible(true);
@@ -92,20 +95,31 @@ public class GameStoreGUI {
 
     @FXML
     public void getInformation(ActionEvent event) throws IOException {
-        PrintWriter pw = new PrintWriter("data/info.txt");
-        FileReader fileReader = new FileReader("data/info.txt");
-        Scanner sc = new Scanner(fileReader);
-        pw.print(txtAInformation.getText());
-        pw.close();
-        if(amountShelves!=0){
-            System.out.println(amountShelves);
-            //For shelves
-            /*
-            while (bf.readLine()!=null){
-
+        if(counter<amountShelves){
+            counter+=1;
+            PrintWriter pw = new PrintWriter("data/info.txt");
+            pw.print(txtAInformation.getText());
+            pw.close();
+            FileReader fileReader = new FileReader("data/info.txt");
+            Scanner sc = new Scanner(fileReader);
+           System.out.println(counter);
+            //System.out.println(amountShelves);
+            String line = sc.nextLine();
+            String[] sLine = line.split(" ");
+            String code = sLine[0];
+            int quantity = Integer.parseInt(sLine[1]);
+            gameStore.addShelve(code, quantity);
+            for(int j = 0; j<quantity; j++){
+                int codeGame = sc.nextInt();
+                int priceGame = sc.nextInt();
+                int quantityGame = sc.nextInt();
+                // System.out.println(code+" "+ " "+codeGame +" "+" "+priceGame+ " "+quantityGame);
+                gameStore.shelveAddGame(code, codeGame, priceGame, quantityGame);
             }
-             */
-            amountShelves--;
+            if(counter==3){
+                btInfoShelvesAndClients.setText("Continue");
+            }
+
 
         } else {
             txtAmountShelves.setVisible(false);
@@ -123,37 +137,40 @@ public class GameStoreGUI {
     @FXML
     public void getInformationClient(ActionEvent event) throws FileNotFoundException {
         PrintWriter pw = new PrintWriter("data/info.txt");
-        FileReader fileReader = new FileReader("data/info.txt");
-        BufferedReader bf = new BufferedReader(fileReader);
         pw.print(txtAInformation.getText());
         pw.close();
-        if(amountClientes!=0){
-            System.out.println("Completo las shelves");
-            System.out.println(amountClientes);
-            //For clients
-
-            /*
-            while (bf.readLine()!=null){
-
-
+        FileReader fileReader = new FileReader("data/info.txt");
+        Scanner sc = new Scanner(fileReader);
+           System.out.println("Completo las shelves");
+            //System.out.println(amountClientes);
+            for(int i = 0; i<amountClientes; i++){
+                String line = sc.nextLine();
+                String[] sLine = line.split(" ");
+                ArrayList<String> gameCodes = new ArrayList<>();
+                for(int j = 1; j<sLine.length; j++){
+                    gameCodes.add(sLine[j]);
+                }
+                gameStore.addClient(sLine[0], gameCodes);
             }
-             */
-            amountClientes--;
-        }else{
 
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Exception Dialog");
-            alert.setHeaderText("Look, an Exception Dialog");
-            alert.setContentText("Could not find file blabla.txt!");
+            alert.setTitle("Today's operation");
+            alert.setHeaderText(null);
+            alert.setContentText("This are today's moves");
 
-            Exception ex = new FileNotFoundException("Could not find file blabla.txt");
+            //   Exception ex = new FileNotFoundException("Could not find file blabla.txt");
 
-            StringWriter sw = new StringWriter();
-            PrintWriter pw1 = new PrintWriter(sw);
-            ex.printStackTrace(pw1);
-            String exceptionText = sw.toString();
+            //    StringWriter sw = new StringWriter();
+            // PrintWriter pw1 = new PrintWriter(sw);
+            //  ex.printStackTrace(pw1);
 
-            Label label = new Label("The exception stacktrace was:");
+             gameStore.setup();
+             while(!gameStore.advance()){
+              System.out.println("gui");
+             }
+            String exceptionText = gameStore.getOut();
+
+            Label label = new Label("The result of today was:");
 
             TextArea textArea = new TextArea(exceptionText);
             textArea.setEditable(false);
@@ -171,7 +188,7 @@ public class GameStoreGUI {
             alert.getDialogPane().setExpandableContent(expContent);
 
             alert.showAndWait();
-        }
+
 
         txtAInformation.setText("");
 

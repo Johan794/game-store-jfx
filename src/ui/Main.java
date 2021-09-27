@@ -64,12 +64,12 @@ public class Main extends Application {
             }
             gs.addClient(sLine[0], gameCodes);
         }
-
+        gs.setup();
         while(!gs.advance()){
             //Hola
 
         }
-        // System.out.print(gs.getOut());
+        System.out.print(gs.getOut());
 
     }
 

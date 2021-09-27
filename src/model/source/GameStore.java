@@ -6,6 +6,7 @@ import model.ownImplementation.classes.HashTable;
 import model.ownImplementation.classes.QueueList;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class GameStore{
 
@@ -15,9 +16,10 @@ public class GameStore{
     private int outClients;
     private ArrayList<Shelve> shelves;
     private ArrayList<Client> clients;
-    private ArrayList<Client> findingClients;
+    private ArrayList<Duplex<Integer, Client>> findingClients;
     private ArrayList<Client> payingClients;
     private QueueList<Client> payQueue;
+    private ArrayList<String> orderedOut;
     private HashTable<Integer, Duplex<String, Integer>> out;
     private int time;
 
@@ -30,6 +32,7 @@ public class GameStore{
         this.findingClients = new ArrayList<>();
         this.payingClients = new ArrayList<>();
         this.payQueue = new QueueList<>();
+        this.orderedOut = new ArrayList<>();
         this.time = 0;
     }
 
@@ -120,9 +123,11 @@ public class GameStore{
 
     public Game findGame(int gCode){
         Game game = null;
-        for(int i = 0; i<shelves.size(); i++){
+        boolean found = false;
+        for(int i = 0; i<shelves.size() && !found; i++){
             if(shelves.get(i).isGame(gCode)){
                 game = shelves.get(i).findGame(gCode);
+                found = true;
             }
         }
         return game;
@@ -130,9 +135,11 @@ public class GameStore{
 
     public String findGameShelve(int gCode){
         String shelve = "";
-        for(int i = 0; i<shelves.size(); i++){
+        boolean found = false;
+        for(int i = 0; i<shelves.size() && !found; i++){
             if(shelves.get(i).isGame(gCode)){
                 shelve = shelves.get(i).getCode();
+                found = true;
             }
         }
         return shelve;
@@ -168,16 +175,53 @@ public class GameStore{
         return bl;
     }
 
-    public boolean advance(){
-        if(out == null){
-            out = new HashTable<>(clients.size());
+    public void setup(){
+        out = new HashTable<>(clients.size());
+        for(int i = 0; i<clients.size(); i++){
+            findingClients.add(new Duplex<>(i, clients.get(i)));
         }
-        if(clients.size() > time){
-            findingClients.add(clients.get(time));
-        }
+        boolean bl = false;
         for(int i = 0; i<findingClients.size(); i++){
-            if(!proccessFindGame(findingClients.get(i))){
-                payQueue.enqueue(findingClients.get(i));
+            while(!bl){
+                bl = proccessFindGame(findingClients.get(i).getValue());
+                findingClients.get(i).setKey(findingClients.get(i).getKey()+1);
+            }
+        }
+            boolean changed = true;
+            for(int i = 1; i < findingClients.size()-1 && changed; i++){
+                changed = false;
+                for(int j = 0; j < findingClients.size()-i; j++){
+                    if(findingClients.get(j).getKey() > findingClients.get(j+1).getKey()){
+                        changed = true;
+                        Duplex temp = findingClients.get(j);
+                        findingClients.set(j,findingClients.get(j+1));
+                        findingClients.set(j+1, temp);
+                    }
+                }
+            }
+
+        //Aca se ordena :D
+        /*
+            ██╗███╗░░██╗░██████╗███████╗██████╗░████████╗       ░█████╗░░█████╗░██████╗░███████╗
+            ██║████╗░██║██╔════╝██╔════╝██╔══██╗╚══██╔══╝       ██╔══██╗██╔══██╗██╔══██╗██╔════╝
+            ██║██╔██╗██║╚█████╗░█████╗░░██████╔╝░░░██║░░░       ██║░░╚═╝██║░░██║██║░░██║█████╗░░
+            ██║██║╚████║░╚═══██╗██╔══╝░░██╔══██╗░░░██║░░░       ██║░░██╗██║░░██║██║░░██║██╔══╝░░
+            ██║██║░╚███║██████╔╝███████╗██║░░██║░░░██║░░░       ╚█████╔╝╚█████╔╝██████╔╝███████╗
+            ╚═╝╚═╝░░╚══╝╚═════╝░╚══════╝╚═╝░░╚═╝░░░╚═╝░░░       ░╚════╝░░╚════╝░╚═════╝░╚══════╝
+
+            ██╗░░██╗███████╗██████╗░███████╗
+            ██║░░██║██╔════╝██╔══██╗██╔════╝
+            ███████║█████╗░░██████╔╝█████╗░░
+            ██╔══██║██╔══╝░░██╔══██╗██╔══╝░░
+            ██║░░██║███████╗██║░░██║███████╗
+            ╚═╝░░╚═╝╚══════╝╚═╝░░╚═╝╚══════╝
+         */
+    }
+
+    public boolean advance(){
+        for(int i = 0; i<findingClients.size(); i++){
+            if(!proccessFindGame(findingClients.get(i).getValue())){
+                payQueue.enqueue(findingClients.get(i).getValue());
                 findingClients.remove(i);
                 i--;
             }
@@ -193,6 +237,7 @@ public class GameStore{
                 occupiedCashiers--;
                 Duplex<String, Integer> dupl = new Duplex<>(payingClients.get(i).getCode(), clientGetTotal(payingClients.get(i)));
                 out.insert(dupl, outClients, 0);
+                orderedOut.add(payingClients.get(i).getCode());
                 payingClients.remove(i);
                 i--;
             }
@@ -207,7 +252,7 @@ public class GameStore{
 
     public int clientGetTotal(Client client){
         int total = 0;
-        StackList<Game> gameCopy = client.getPaidGames();
+        StackList<Game> gameCopy = new StackList<>(client.getPaidGames());
         while(!gameCopy.isEmpty()){
             total += gameCopy.pop().getPrice();
         }
@@ -215,6 +260,7 @@ public class GameStore{
     }
 
     public String getOut(){
+        System.out.println(Arrays.toString(orderedOut.toArray()));
         String sOut = "";
         for(int i = 0; i<out.getSize(); i++){
             sOut += out.getNodeByIndex(i).getValue().getKey() + " " + out.getNodeByIndex(i).getValue().getValue() + "\n";
