@@ -178,13 +178,13 @@ public class GameStore{
     public void setup(){
         out = new HashTable<>(clients.size());
         for(int i = 0; i<clients.size(); i++){
-            findingClients.add(new Duplex<>(i, clients.get(i)));
+            findingClients.add(new Duplex<>(i+1+clients.get(i).getGamesQuantity(), clients.get(i)));
         }
-        boolean bl = false;
+        boolean bl;
         for(int i = 0; i<findingClients.size(); i++){
-            while(!bl){
+            bl = true;
+            while(bl){
                 bl = proccessFindGame(findingClients.get(i).getValue());
-                findingClients.get(i).setKey(findingClients.get(i).getKey()+1);
             }
         }
             boolean changed = true;
@@ -216,20 +216,19 @@ public class GameStore{
             ██║░░██║███████╗██║░░██║███████╗
             ╚═╝░░╚═╝╚══════╝╚═╝░░╚═╝╚══════╝
          */
+        for (int i = 0; i<findingClients.size(); i++){
+            payQueue.enqueue(findingClients.get(i).getValue());
+            findingClients.remove(i);
+            i--;
+        }
     }
 
     public boolean advance(){
-        for(int i = 0; i<findingClients.size(); i++){
-            if(!proccessFindGame(findingClients.get(i).getValue())){
-                payQueue.enqueue(findingClients.get(i).getValue());
-                findingClients.remove(i);
-                i--;
-            }
-        }
-        if(occupiedCashiers <= cashiers){
+        while(occupiedCashiers<cashiers && !payQueue.isEmpty()){
             Client client = payQueue.dequeue();
             if(client != null) {
                 payingClients.add(client);
+                occupiedCashiers++;
             }
         }
         for(int i = 0; i<payingClients.size(); i++){
