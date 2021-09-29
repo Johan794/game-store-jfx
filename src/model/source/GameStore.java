@@ -58,7 +58,7 @@ public class GameStore{
         return index;
     }
 
-    private long strToIntCode(String code){
+    public long strToIntCode(String code){
         long iCode = 0;
         int radix = 127;
         int j = 0;
@@ -292,5 +292,13 @@ public class GameStore{
 
     public int getTime(){
         return time;
+    }
+
+    public ArrayList<Shelve> getShelves() {
+        return shelves;
+    }
+
+    public ArrayList<Client> getClients() {
+        return clients;
     }
 }

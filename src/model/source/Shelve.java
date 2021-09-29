@@ -44,4 +44,8 @@ public class Shelve {
     public String getCode(){
         return code;
     }
+
+    public ArrayList<Game> getGames() {
+        return games;
+    }
 }
