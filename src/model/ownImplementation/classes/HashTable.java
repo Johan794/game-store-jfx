@@ -46,7 +46,7 @@ public class HashTable<T,V>  implements IHashTable<T,V> {
 
     @Override
     public boolean remove(T key) {
-        HashNode<T,V> toRemove = getNodeBykey(key);
+        HashNode<T,V> toRemove = getNodeByKey(key);
         if(toRemove == null){
             return false;
         }else{
@@ -70,14 +70,16 @@ public class HashTable<T,V>  implements IHashTable<T,V> {
     }
 
     @Override
-    public HashNode<T, V> getNodeBykey(T key) {
+    public HashNode<T, V> getNodeByKey(T key) {
         return getNodeByKey(key,node);
     }
 
     private HashNode<T,V>getNodeByKey(T key, HashNode<T,V> current){
-        if(current.getKey()==key){
+        if(current.getKey().equals(key)){
+            System.out.println("Lo encontró");
             return current;
         }else{
+            System.out.println("Busca next");
             return getNodeByKey(key, current.getNext());
         }
     }
