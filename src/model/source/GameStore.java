@@ -264,8 +264,9 @@ public class GameStore{
         String sOut = "";
         for(int i = 0; i<orderedOut.size(); i++){
             HashNode<Integer, Duplex<String, Integer>> node = out.getNodeByKey(Integer.parseInt(orderedOut.get(i)));
-            sOut += node.getValue().getKey() + " " + node.getValue().getValue() + "\n";
-            sOut += clientStackToString(findClientByCode(node.getValue().getKey())) + "\n";
+            sOut += "Client's id: "+node.getValue().getKey() + "  Total paid: " + node.getValue().getValue() + "\n";
+            sOut += "Buy Game codes:"+clientStackToString(findClientByCode(node.getValue().getKey())) + "\n";
+            sOut+="\n";
         }
         return sOut;
     }
