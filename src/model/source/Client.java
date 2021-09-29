@@ -25,6 +25,7 @@ public class Client {
 
     public void addGameToQueue(int gCode){
         findGames.enqueue(gCode);
+        gamesQuantity++;
     }
 
     public String getCode(){
