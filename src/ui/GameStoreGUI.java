@@ -2,6 +2,8 @@ package ui;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -9,7 +11,6 @@ import javafx.scene.layout.Priority;
 import model.source.GameStore;
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class GameStoreGUI {
@@ -49,12 +50,14 @@ public class GameStoreGUI {
     private int amountShelves;
     private int amountClientes;
     private int counter;
+    private int cases;
 
 
     public GameStoreGUI() {
         amountClientes = 0;
         amountShelves = 0;
         counter = 0;
+        cases = 0;
 
     }
 
@@ -62,11 +65,13 @@ public class GameStoreGUI {
         gameStore = new GameStore(cashiers,shelves);
     }
     public BorderPane getBorderpane(){
+
         return mainPane;
     }
 
     @FXML
     public void getAmounts(ActionEvent event) {
+
         try {
             if(gameStore==null){
                 int cashiers = Integer.parseInt(txtAmountCashiers.getText());
@@ -135,7 +140,7 @@ public class GameStoreGUI {
     }
 
     @FXML
-    public void getInformationClient(ActionEvent event) throws FileNotFoundException {
+    public void getInformationClient(ActionEvent event) throws IOException {
         PrintWriter pw = new PrintWriter("data/info.txt");
         pw.print(txtAInformation.getText());
         pw.close();
@@ -191,11 +196,26 @@ public class GameStoreGUI {
 
 
         txtAInformation.setText("");
+        cases--;
+        if(cases!=0){
+            FXMLLoader fxmlLoader1 = new FXMLLoader(getClass().getResource("./jfx/secondPane.fxml"));
+            fxmlLoader1.setController(this);
+            Parent input = fxmlLoader1.load();
+            mainPane.setCenter(input);
+        }else{
+            Alert alert1 = new Alert(Alert.AlertType.INFORMATION);
+            alert1.setTitle("Thanks for using the program");
+            alert1.setHeaderText(null);
+            alert1.setContentText("Have a nice day :)");
+
+            alert1.showAndWait();
+        }
 
 
 
     }
 
-
-
+    public void setCases(int cases) {
+        this.cases = cases;
+    }
 }

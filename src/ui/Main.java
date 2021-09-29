@@ -4,9 +4,12 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.TextInputDialog;
 import javafx.stage.Stage;
 import model.source.GameStore;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.Scanner;
 
 public class Main extends Application {
@@ -81,10 +84,27 @@ public class Main extends Application {
 
         Parent root = fxmlLoader.load();
 
+        TextInputDialog dialog = new TextInputDialog("1");
+        dialog.setTitle("Welcome");
+        dialog.setHeaderText("Let's get started");
+        dialog.setContentText("Please enter the number of cases:");
+
+        Optional<String> result = dialog.showAndWait();
+        try {
+            result.ifPresent(s -> gui.setCases(Integer.parseInt(s)));
+        }catch (NumberFormatException nfe){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Dialog");
+            alert.setHeaderText("Look, something went wrong");
+            alert.setContentText("Please type a valid value and run the program again");
+            alert.showAndWait();
+        }
+
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
         primaryStage.setTitle("Game Store");
         primaryStage.show();
+
 
         FXMLLoader fxmlLoader1 = new FXMLLoader(getClass().getResource("./jfx/secondPane.fxml"));
         fxmlLoader1.setController(gui);
