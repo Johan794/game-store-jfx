@@ -175,7 +175,7 @@ public class GameStoreGUI {
              }
             String exceptionText = gameStore.getOut();
 
-            Label label = new Label("The result of today was:");
+            Label label = new Label("Today's purchases");
 
             TextArea textArea = new TextArea(exceptionText);
             textArea.setEditable(false);
