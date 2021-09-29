@@ -26,53 +26,57 @@ public class Main extends Application {
         System.out.println("Validacion por consola: ");
         sc = new Scanner(System.in);
         int cases = sc.nextInt();
-        int cashier = sc.nextInt();
-        int shelves = sc.nextInt();
 
-        GameStore gs = new GameStore(cashier, shelves);
+        for (int k = 0; k <cases ; k++) {
+            int cashier = sc.nextInt();
+            int shelves = sc.nextInt();
 
-        sc.nextLine();
+            GameStore gs = new GameStore(cashier, shelves);
 
-        String code = "";
-        int quantity = 0;
-        String line = "";
-        int codeGame = 0;
-        int priceGame = 0;
-        int quantityGame = 0;
-        for(int i = 0; i<shelves; i++){
-            line = sc.nextLine();
-            String[] sLine = line.split(" ");
-            code = sLine[0];
-            quantity = Integer.parseInt(sLine[1]);
-            gs.addShelve(code, quantity);
-            for(int j = 0; j<quantity; j++){
-                codeGame = sc.nextInt();
-                priceGame = sc.nextInt();
-                quantityGame = sc.nextInt();
-               // System.out.println(code+" "+ " "+codeGame +" "+" "+priceGame+ " "+quantityGame);
-                gs.shelveAddGame(code, codeGame, priceGame, quantityGame);
-            }
             sc.nextLine();
-        }
 
-        int clients = sc.nextInt();
-
-        sc.nextLine();
-        for(int i = 0; i<clients; i++){
-            line = sc.nextLine();
-            String[] sLine = line.split(" ");
-            ArrayList<String> gameCodes = new ArrayList<>();
-            for(int j = 1; j<sLine.length; j++){
-                gameCodes.add(sLine[j]);
+            String code = "";
+            int quantity = 0;
+            String line = "";
+            int codeGame = 0;
+            int priceGame = 0;
+            int quantityGame = 0;
+            for(int i = 0; i<shelves; i++){
+                line = sc.nextLine();
+                String[] sLine = line.split(" ");
+                code = sLine[0];
+                quantity = Integer.parseInt(sLine[1]);
+                gs.addShelve(code, quantity);
+                for(int j = 0; j<quantity; j++){
+                    codeGame = sc.nextInt();
+                    priceGame = sc.nextInt();
+                    quantityGame = sc.nextInt();
+                    // System.out.println(code+" "+ " "+codeGame +" "+" "+priceGame+ " "+quantityGame);
+                    gs.shelveAddGame(code, codeGame, priceGame, quantityGame);
+                }
+                sc.nextLine();
             }
-            gs.addClient(sLine[0], gameCodes);
-        }
-        gs.setup();
-        while(!gs.advance()){
-            //Hola
 
+            int clients = sc.nextInt();
+
+            sc.nextLine();
+            for(int i = 0; i<clients; i++){
+                line = sc.nextLine();
+                String[] sLine = line.split(" ");
+                ArrayList<String> gameCodes = new ArrayList<>();
+                for(int j = 1; j<sLine.length; j++){
+                    gameCodes.add(sLine[j]);
+                }
+                gs.addClient(sLine[0], gameCodes);
+            }
+            gs.setup();
+            while(!gs.advance()){
+                //Hola
+
+            }
+            System.out.print(gs.getOut());
         }
-        System.out.print(gs.getOut());
+
 
     }
 
