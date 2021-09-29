@@ -75,9 +75,11 @@ public class HashTable<T,V>  implements IHashTable<T,V> {
     }
 
     private HashNode<T,V>getNodeByKey(T key, HashNode<T,V> current){
-        if(current.getKey()==key){
+        if(current.getKey().equals(key)){
+            System.out.println("Lo encontró");
             return current;
         }else{
+            System.out.println("Busca next");
             return getNodeByKey(key, current.getNext());
         }
     }
