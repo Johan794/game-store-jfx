@@ -8,5 +8,5 @@ public interface IHashTable<K,V> {
     boolean remove(K key);
     void buildTable(int size, HashNode<K,V> hashNode);
     int hashFuntion(int key, int index);
-    HashNode<K,V> getNodeBykey(K key);
+    HashNode<K,V> getNodeByKey(K key);
 }

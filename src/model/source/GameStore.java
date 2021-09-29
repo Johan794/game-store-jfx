@@ -58,7 +58,7 @@ public class GameStore{
         return index;
     }
 
-    private long strToIntCode(String code){
+    public long strToIntCode(String code){
         long iCode = 0;
         int radix = 127;
         int j = 0;
@@ -235,7 +235,8 @@ public class GameStore{
             if(!proccessPayGame(payingClients.get(i))){
                 occupiedCashiers--;
                 Duplex<String, Integer> dupl = new Duplex<>(payingClients.get(i).getCode(), clientGetTotal(payingClients.get(i)));
-                out.insert(dupl, outClients, 0);
+                out.insert(dupl, Integer.parseInt(payingClients.get(i).getCode()), 0);
+                System.out.println(dupl.getKey());
                 orderedOut.add(payingClients.get(i).getCode());
                 payingClients.remove(i);
                 i--;
@@ -261,9 +262,10 @@ public class GameStore{
     public String getOut(){
         System.out.println(Arrays.toString(orderedOut.toArray()));
         String sOut = "";
-        for(int i = 0; i<out.getSize(); i++){
-            sOut += out.getNodeByIndex(i).getValue().getKey() + " " + out.getNodeByIndex(i).getValue().getValue() + "\n";
-            sOut += clientStackToString(findClientByCode(out.getNodeByIndex(i).getValue().getKey())) + "\n";
+        for(int i = 0; i<orderedOut.size(); i++){
+            HashNode<Integer, Duplex<String, Integer>> node = out.getNodeByKey(Integer.parseInt(orderedOut.get(i)));
+            sOut += node.getValue().getKey() + " " + node.getValue().getValue() + "\n";
+            sOut += clientStackToString(findClientByCode(node.getValue().getKey())) + "\n";
         }
         return sOut;
     }
@@ -291,5 +293,13 @@ public class GameStore{
 
     public int getTime(){
         return time;
+    }
+
+    public ArrayList<Shelve> getShelves() {
+        return shelves;
+    }
+
+    public ArrayList<Client> getClients() {
+        return clients;
     }
 }
