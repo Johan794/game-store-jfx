@@ -34,7 +34,6 @@ public class Main extends Application {
             GameStore gs = new GameStore(cashier, shelves);
 
             sc.nextLine();
-
             String code = "";
             int quantity = 0;
             String line = "";
